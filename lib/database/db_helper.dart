@@ -84,7 +84,7 @@ Future<void> _seedDatabase(Database db) async {
           
         counter++;
         
-      } catch (e, stackTrace) {
+      } catch (e) {
           errorCount++;
           print('--- HATA ALINDI ---');
           print('Sıra: ${counter + 1} | Kelime: ${item['headword'] ?? 'Bilinmeyen'}');
