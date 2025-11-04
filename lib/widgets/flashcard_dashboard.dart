@@ -126,7 +126,6 @@ class FlashcardDashboard extends StatelessWidget {
           
           // 4. Seviye Kartları
           ...levels.map((level) {
-            final levelWords = allWords.where((w) => w.cefr == level).toList();
             final count = allWords.where((w) => w.cefr == level && w.nextReview.compareTo(DateFormat('yyyy-MM-dd').format(DateTime.now())) <= 0 && !w.isLearned).length;
             final Color color = LEVEL_COLORS[level] ?? Colors.grey;
 

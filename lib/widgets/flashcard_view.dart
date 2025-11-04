@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:words_app/app_state.dart';
 import 'package:words_app/models/word.dart';
-import 'package:words_app/constants.dart';
 
 // Ana kart tekrarı görünümü (Butonlar alta sabitlenmiş)
 class FlashcardView extends StatelessWidget {
