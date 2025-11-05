@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:words_app/database/db_helper.dart';
 import 'package:words_app/models/word.dart';
 import 'package:words_app/services/tts_service.dart';
+import 'package:intl/intl.dart'; // <<< EKLENDİ (DateFormat hatası için)
 
 // ======================================================
 // Kullanıcı İlerleme Modeli (UserProgress)
@@ -95,30 +96,61 @@ class AppState extends ChangeNotifier {
 
   // Basit SRS Algoritması
   Word calculateNextReview(Word word, bool known) {
-    int repetitionCount = known ? word.repetitionCount + 1 : 0;
-    int days = 0;
+    // 0 = Bilmiyorum (Zor); 5 = Biliyorum (Kolay)
+    final int quality = known ? 5 : 0;
 
-    if (known) {
-      if (repetitionCount == 1)
-        days = 1;
-      else if (repetitionCount == 2)
-        days = 3;
-      else
-        days = (5 * (repetitionCount - 1)).round();
+    int newRepetitions = word.repetitionCount;
+    int newInterval = word.interval;
+    double newEasinessFactor = word.easinessFactor;
+
+    final int maxIntervalDays = 120; // Tekrar aralığı limiti
+
+    // --- SM-2 Algoritması Uygulaması ---
+
+    if (quality >= 3) {
+      // Başarılı Hatırlama (Biliyorum, 3-5 puan arası)
+      newRepetitions++;
+
+      // EF Güncelleme
+      newEasinessFactor = newEasinessFactor +
+          (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
+      if (newEasinessFactor < 1.3) newEasinessFactor = 1.3; // Min EF sınırı
+
+      // Interval Hesaplama
+      if (newRepetitions == 1) {
+        newInterval = 1;
+      } else if (newRepetitions == 2) {
+        newInterval = 6;
+      } else {
+        newInterval = (newInterval * newEasinessFactor).round();
+      }
     } else {
-      days = 0;
+      // Başarısız Hatırlama (Bilmiyorum, 0-2 puan arası)
+      newRepetitions = 0;
+      newInterval = 1; // Başlangıç intervali
+
+      // EF Güncelleme (Başarısız hatırlama sonrası EF düşer)
+      newEasinessFactor = newEasinessFactor - 0.2;
+      if (newEasinessFactor < 1.3) newEasinessFactor = 1.3;
     }
 
-    DateTime now = DateTime.now();
-    DateTime nextReviewDate = now.add(Duration(days: days));
-    String nextReview = nextReviewDate.toString().split(' ')[0];
+    // Max interval sınırı uygulama
+    newInterval = newInterval.clamp(1, maxIntervalDays);
 
-    bool isLearned = known && repetitionCount >= 3;
+    // Sonraki Tekrar Tarihini Hesaplama
+    final DateTime now = DateTime.now();
+    final DateTime nextReviewDate = now.add(Duration(days: newInterval));
+    final String nextReview = DateFormat('yyyy-MM-dd').format(nextReviewDate);
+
+    final bool isLearned = newRepetitions >= 5 &&
+        quality >= 4; // 5 Başarılı tekrar ve yüksek kalite
 
     return word.copyWith(
-      repetitionCount: repetitionCount,
+      repetitionCount: newRepetitions,
       nextReview: nextReview,
       isLearned: isLearned,
+      easinessFactor: newEasinessFactor,
+      interval: newInterval,
     );
   }
 

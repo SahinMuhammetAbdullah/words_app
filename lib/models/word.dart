@@ -1,5 +1,3 @@
-// lib/models/word.dart
-
 class Word {
   final int? id;
   final String headword;
@@ -9,11 +7,15 @@ class Word {
   final String sentenceTr;
   final String turkish;
 
-  // SRS (Spaced Repetition System) verileri
+  // SRS (Spaced Repetition System) verileri - MEVCUT ALANLAR
   final int repetitionCount;
   final String nextReview; // ISO 8601 string: YYYY-MM-DD
   final bool isLearned;
   final bool isFavorite;
+
+  // YENİ SM-2 ALANLARI
+  final double easinessFactor; // Kolaylık Faktörü (EF). Varsayılan: 2.5
+  final int interval; // Tekrar aralığı (Gün)
 
   Word({
     this.id,
@@ -23,17 +25,17 @@ class Word {
     required this.sentence,
     required this.sentenceTr,
     required this.turkish,
+    // SRS Default/Mevcut
     this.repetitionCount = 0,
-    this.nextReview = '2000-01-01', // Geçmiş bir tarih, hemen tekrar için
+    this.nextReview = '2000-01-01',
     this.isLearned = false,
     this.isFavorite = false,
+    // SM-2 Default/Yeni
+    this.easinessFactor = 2.5,
+    this.interval = 0,
   });
 
-  // =======================================================
-  // Veri Kaynağına Özel Metotlar
-  // =======================================================
-
-  // Veritabanından objeye çevirme (SRS ve DB ID'yi okur)
+  // ... (Word.fromMap metodu)
   factory Word.fromMap(Map<String, dynamic> map) {
     return Word(
       id: map['id'],
@@ -47,23 +49,31 @@ class Word {
       nextReview: map['next_review'],
       isLearned: map['is_learned'] == 1,
       isFavorite: map['is_favorite'] == 1,
+      // YENİ ALANLAR OKUNUYOR
+      easinessFactor: map['easiness_factor'] is double
+          ? map['easiness_factor']
+          : (map['easiness_factor'] as int).toDouble(),
+      interval: map['interval'],
     );
   }
 
-  // JSON'dan yeni kelime oluşturma (Sadece temel kelime verilerini okur)
+  // ... (Word.fromJson metodu - Sadece SRS default alanları güncellendi)
   factory Word.fromJson(Map<String, dynamic> json) {
     return Word(
       headword: json['headword']?.toString() ?? '',
-        pos: json['pos']?.toString() ?? '',
-        cefr: json['CEFR']?.toString() ?? '',
-        sentence: json['sentence']?.toString() ?? '',
-        sentenceTr: json['sentence_tr']?.toString() ?? '',
-        turkish: json['turkish']?.toString() ?? '',
-      // SRS alanları burada varsayılan (initial) değerleri alır:
+      pos: json['pos']?.toString() ?? '',
+      cefr: json['CEFR']?.toString() ?? '',
+      sentence: json['sentence']?.toString() ?? '',
+      sentenceTr: json['sentence_tr']?.toString() ?? '',
+      turkish: json['turkish']?.toString() ?? '',
+      // SRS Default/Mevcut
       repetitionCount: 0,
-      nextReview: '2000-01-01', 
+      nextReview: '2000-01-01',
       isLearned: false,
       isFavorite: false,
+      // SM-2 Default/Yeni
+      easinessFactor: 2.5,
+      interval: 0,
     );
   }
 
@@ -80,6 +90,9 @@ class Word {
       'next_review': nextReview,
       'is_learned': isLearned ? 1 : 0,
       'is_favorite': isFavorite ? 1 : 0,
+      // YENİ ALANLAR DB'ye yazılıyor
+      'easiness_factor': easinessFactor,
+      'interval': interval,
     };
   }
 
@@ -96,6 +109,8 @@ class Word {
     String? nextReview,
     bool? isLearned,
     bool? isFavorite,
+    double? easinessFactor,
+    int? interval,
   }) {
     return Word(
       id: id ?? this.id,
@@ -109,6 +124,8 @@ class Word {
       nextReview: nextReview ?? this.nextReview,
       isLearned: isLearned ?? this.isLearned,
       isFavorite: isFavorite ?? this.isFavorite,
+      easinessFactor: easinessFactor ?? this.easinessFactor,
+      interval: interval ?? this.interval,
     );
   }
 }
