@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:words_app/app_state.dart';
-import 'package:words_app/models/word.dart';
+import 'package:words_app/core/models/word.dart';
 import 'package:intl/intl.dart'; // <<< EKLENDİ (DateFormat hatası için)
 import 'package:words_app/app_scaffold.dart'; // <<< BU SATIRIN VAR OLDUĞUNDAN EMİN OLUN!
 

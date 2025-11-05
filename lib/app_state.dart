@@ -1,10 +1,12 @@
 // lib/app_state.dart
 
 import 'package:flutter/material.dart';
-import 'package:words_app/database/db_helper.dart';
-import 'package:words_app/models/word.dart';
-import 'package:words_app/services/tts_service.dart';
-import 'package:intl/intl.dart'; // <<< EKLENDİ (DateFormat hatası için)
+import 'package:intl/intl.dart';
+
+import 'package:words_app/data/database/db_helper.dart';
+import 'package:words_app/core/models/word.dart';
+import 'package:words_app/core/helpers/tts_service.dart';
+import 'package:words_app/core/constants/constants.dart';
 
 // ======================================================
 // Kullanıcı İlerleme Modeli (UserProgress)
@@ -50,6 +52,13 @@ class AppState extends ChangeNotifier {
   List<Word> _allWords = [];
   final DatabaseHelper _dbHelper = DatabaseHelper();
   final TTSService ttsService = TTSService();
+  AppThemeMode _currentThemeMode = AppThemeMode.system;
+  AppThemeMode get currentThemeMode => _currentThemeMode;
+  void setThemeMode(AppThemeMode mode) {
+    _currentThemeMode = mode;
+    notifyListeners();
+    // Kalıcılık (SharedPreferences) burada uygulanmalıdır.
+  }
 
   // Kullanıcı İlerlemesi State'i
   UserProgress _userProgress = const UserProgress();

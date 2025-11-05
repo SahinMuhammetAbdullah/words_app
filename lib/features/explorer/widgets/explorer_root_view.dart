@@ -1,8 +1,8 @@
 // lib/widgets/explorer_root_view.dart
 
 import 'package:flutter/material.dart';
-import 'package:words_app/constants.dart';
-import 'package:words_app/pages/explorer_page.dart';
+import 'package:words_app/core/constants/constants.dart';
+import 'package:words_app/features/explorer/explorer_page.dart';
 
 class ExplorerRootView extends StatelessWidget {
   final Function(ExplorerView view) onViewChange;

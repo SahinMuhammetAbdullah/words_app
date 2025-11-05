@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:words_app/models/word.dart';
+import 'package:words_app/core/models/word.dart';
 import 'package:intl/intl.dart';
 import 'package:words_app/app_state.dart'; 
-import 'package:words_app/constants.dart';
-import 'package:words_app/widgets/flashcard_dashboard.dart'; // Yeni Dashboard widget'ı
-import 'package:words_app/widgets/flashcard_view.dart';     // Yeni Kart Görünümü widget'ı
+import 'package:words_app/core/constants/constants.dart';
+import 'package:words_app/features/repetition/widgets/repetition_dashboard.dart'; // Yeni Dashboard widget'ı
+import 'package:words_app/features/repetition/widgets/repetition_view.dart';     // Yeni Kart Görünümü widget'ı
 
-class FlashcardPage extends StatefulWidget {
-  const FlashcardPage({super.key});
+class RepetitionPage extends StatefulWidget {
+  const RepetitionPage({super.key});
 
   @override
-  State<FlashcardPage> createState() => _FlashcardPageState();
+  State<RepetitionPage> createState() => _RepetitionPageState();
 }
 
-class _FlashcardPageState extends State<FlashcardPage> {
+class _RepetitionPageState extends State<RepetitionPage> {
   int _currentIndex = 0;
   
   List<Word> _reviewWords = [];
@@ -108,7 +108,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
 
       return Scaffold(
         appBar: AppBar(title: const Text('Kart Tekrarı')),
-        body: FlashcardDashboard(
+        body: RepetitionDashboard(
             allWords: allWords,
             levels: _levels,
             randomPool: randomPool,
@@ -173,7 +173,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                   () => _selectedLevel = null), 
             )
           ]),
-      body: FlashcardView(
+      body: RepetitionView(
           currentWord: currentWord!,
           totalCount: _reviewWords.length,
           currentIndex: _currentIndex,

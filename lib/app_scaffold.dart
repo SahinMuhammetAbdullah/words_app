@@ -1,11 +1,10 @@
-// lib/app_scaffold.dart
-
 import 'package:flutter/material.dart';
-import 'package:words_app/pages/home_page.dart';
-import 'package:words_app/pages/explorer_page.dart';
-import 'package:words_app/pages/flashcard_page.dart';
-import 'package:words_app/pages/quiz_page.dart';
-import 'package:words_app/pages/stats_page.dart';
+
+import 'package:words_app/features/home/home_page.dart';
+import 'package:words_app/features/explorer/explorer_page.dart';
+import 'package:words_app/features/repetition/repetition_page.dart';
+import 'package:words_app/features/quiz/quiz_page.dart';
+import 'package:words_app/features/settings/settings_page.dart'; // YENİ: Ayarlar sayfası
 
 // Uygulamanın iskeleti ve navigasyonu
 class AppScaffold extends StatefulWidget {
@@ -22,9 +21,9 @@ class AppScaffoldState extends State<AppScaffold> {
   final List<Widget> _pages = [
     const HomePage(),
     const ExplorerPage(),
-    const FlashcardPage(),
+    const RepetitionPage(),
     const QuizPage(),
-    const StatsPage(),
+    const SettingsPage(),
   ];
 
   // 1. Dışarıdan çağrılabilen, BottomBar'ı değiştiren ana metot
@@ -52,7 +51,8 @@ class AppScaffoldState extends State<AppScaffold> {
           BottomNavigationBarItem(
               icon: Icon(Icons.flash_on), label: 'Hızlı Test'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.trending_up), label: 'İstatistik'),
+              icon: Icon(Icons.settings),
+              label: 'Ayarlar'), // <<< İSTATİSTİK YERİNE AYARLAR
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.blue,

@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:words_app/app_state.dart';
-import 'package:words_app/constants.dart';
-import 'package:words_app/widgets/category_card.dart'; // CategoryCard'ı kullanır
+import 'package:words_app/core/constants/constants.dart';
+import 'package:words_app/core/widgets/category_card.dart'; // CategoryCard'ı kullanır
 
 class ExplorerLevelSelection extends StatelessWidget {
   final AppState appState;

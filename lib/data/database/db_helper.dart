@@ -2,7 +2,7 @@
 
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:words_app/models/word.dart';
+import 'package:words_app/core/models/word.dart';
 import 'package:flutter/services.dart' show rootBundle; // Assets okumak için
 import 'dart:convert'; // JSON çözmek için
 

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:words_app/app_state.dart';
-import 'package:words_app/constants.dart';
-import 'package:words_app/models/word.dart';
+import 'package:words_app/core/constants/constants.dart';
+import 'package:words_app/core/models/word.dart';
 import 'package:intl/intl.dart';
 
-class FlashcardDashboard extends StatelessWidget {
+class RepetitionDashboard extends StatelessWidget {
   final List<Word> allWords;
   final List<String> levels;
   final List<Word> randomPool;
@@ -12,7 +12,7 @@ class FlashcardDashboard extends StatelessWidget {
   final Function(String level) onLevelSelected;
   final Function() onRandomSelected;
 
-  const FlashcardDashboard({
+  const RepetitionDashboard({
     super.key,
     required this.allWords,
     required this.levels,

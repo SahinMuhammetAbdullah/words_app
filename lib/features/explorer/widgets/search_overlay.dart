@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:words_app/app_state.dart';
-import 'package:words_app/models/word.dart';
-import 'package:words_app/widgets/word_card_tile.dart';
-import 'package:words_app/constants.dart';
+import 'package:words_app/core/models/word.dart';
+import 'package:words_app/features/explorer/widgets/word_card_tile.dart';
+import 'package:words_app/core/constants/constants.dart';
 
 class SearchOverlay extends StatefulWidget {
   final AppState appState;

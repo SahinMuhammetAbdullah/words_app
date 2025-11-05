@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:words_app/app_state.dart';
-import 'package:words_app/models/word.dart';
-import 'package:words_app/widgets/word_card_tile.dart';
-import 'package:words_app/constants.dart';
 
-// Yeni importlar
-import 'package:words_app/widgets/explorer_root_view.dart';
-import 'package:words_app/widgets/explorer_level_selection.dart';
-import 'package:words_app/widgets/explorer_pos_selection.dart';
-import 'package:words_app/widgets/search_overlay.dart'; // Tam ekran arama modülü
+import 'package:words_app/app_state.dart';
+
+import 'package:words_app/core/models/word.dart';
+import 'package:words_app/core/constants/constants.dart';
+
+import 'package:words_app/features/explorer/widgets/word_card_tile.dart';
+import 'package:words_app/features/explorer/widgets/explorer_root_view.dart';
+import 'package:words_app/features/explorer/widgets/explorer_level_selection.dart';
+import 'package:words_app/features/explorer/widgets/explorer_pos_selection.dart';
+import 'package:words_app/features/explorer/widgets/search_overlay.dart';
 
 // Keşif sayfasındaki farklı görünümleri yönetmek için bir Enum
 enum ExplorerView { root, levelSelection, posSelection, wordList }
@@ -27,8 +28,8 @@ class _ExplorerPageState extends State<ExplorerPage> {
 
   // Arama işlemini SearchOverlay'e taşıdığımız için bu alanlar basitleşti.
   final TextEditingController _searchController = TextEditingController();
-  String _searchTerm = '';
-
+  String _searchTerm = "";
+  
   @override
   void initState() {
     super.initState();

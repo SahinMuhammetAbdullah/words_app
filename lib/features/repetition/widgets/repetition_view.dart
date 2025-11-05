@@ -2,16 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:words_app/app_state.dart';
-import 'package:words_app/models/word.dart';
+import 'package:words_app/core/models/word.dart';
 
 // Ana kart tekrarı görünümü (Butonlar alta sabitlenmiş)
-class FlashcardView extends StatelessWidget {
+class RepetitionView extends StatelessWidget {
   final Word currentWord;
   final int totalCount;
   final int currentIndex;
   final Function(Word word, bool known) onAnswer;
 
-  const FlashcardView({
+  const RepetitionView({
     super.key,
     required this.currentWord,
     required this.totalCount,
@@ -37,10 +37,10 @@ class FlashcardView extends StatelessWidget {
                   ),
                 ),
                 
-                // Flashcard Bileşeni
+                // Repetition Bileşeni
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Flashcard(
+                  child: Repetition(
                     word: currentWord,
                   ),
                 ),
@@ -102,23 +102,23 @@ class FlashcardView extends StatelessWidget {
 // FLASHCARD ARTIK KENDİ ÇEVİRME DURUMUNU YÖNETEN STATEFUL WIDGET'TIR
 // =======================================================
 
-class Flashcard extends StatefulWidget {
+class Repetition extends StatefulWidget {
   final Word word;
 
-  const Flashcard({
+  const Repetition({
     super.key, 
     required this.word, 
   });
 
   @override
-  State<Flashcard> createState() => _FlashcardState();
+  State<Repetition> createState() => _RepetitionState();
 }
 
-class _FlashcardState extends State<Flashcard> {
+class _RepetitionState extends State<Repetition> {
   bool _isFlipped = false;
 
   @override
-  void didUpdateWidget(covariant Flashcard oldWidget) {
+  void didUpdateWidget(covariant Repetition oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.word.headword != oldWidget.word.headword) {
       setState(() {

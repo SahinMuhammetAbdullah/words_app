@@ -1,7 +1,7 @@
 // lib/widgets/word_card_tile.dart (TAMAMI)
 
 import 'package:flutter/material.dart';
-import 'package:words_app/models/word.dart';
+import 'package:words_app/core/models/word.dart';
 import 'package:words_app/app_state.dart';
 
 class WordCardTile extends StatelessWidget {
