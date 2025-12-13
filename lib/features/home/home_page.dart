@@ -3,7 +3,7 @@ import 'package:words_app/app_state.dart';
 import 'package:words_app/core/models/word.dart';
 import 'package:intl/intl.dart'; // <<< EKLENDİ (DateFormat hatası için)
 import 'package:words_app/app_scaffold.dart'; // <<< BU SATIRIN VAR OLDUĞUNDAN EMİN OLUN!
-
+import 'package:provider/provider.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -112,7 +112,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // AppState'i dinleyerek veri değişiminde sayfayı yeniler
-    final appState = ListenableProvider.of<AppState>(context);
+    final appState = Provider.of<AppState>(context);
     final stats = _calculateHomeStats(appState.allWords);
 
     return Scaffold(

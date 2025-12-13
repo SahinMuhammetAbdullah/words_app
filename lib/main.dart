@@ -1,14 +1,32 @@
+// lib/main.dart
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:words_app/data/database/db_helper.dart';
 import 'package:words_app/app_state.dart';
 import 'package:words_app/app_scaffold.dart';
 import 'package:words_app/core/constants/constants.dart';
+import 'package:words_app/theme_provider.dart'; // Tema kalıcılığı
 
 void main() async {
+  // Widget ağacının SharedPreferences/Veritabanı işlemlerinden önce hazır olduğundan emin ol
   WidgetsFlutterBinding.ensureInitialized();
-  // Veritabanı başlatma
+
+  // Veritabanını başlatma
   await DatabaseHelper().database;
-  runApp(const MyApp());
+
+  runApp(
+    MultiProvider(
+      providers: [
+        // 1. Tema Sağlayıcısı: Tema kalıcılığını yönetir.
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+
+        // 2. Uygulama Durum Sağlayıcısı: Genel uygulama mantığını yönetir.
+        ChangeNotifierProvider(create: (context) => AppState()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -16,43 +34,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 1. AppState'i oluşturuyoruz ve widget ağacına yayıyoruz.
-    return ListenableProvider(
-      create: (context) => AppState(),
-      // 2. Provider'ın yaydığı değeri dinlemek için bir Builder kullanıyoruz.
-      child: Builder(// Bu Builder, provider'ı dinleyen context'i sağlar
-          builder: (providerContext) {
-        // AppState'i dinleyerek (listen: true), tema değiştiğinde bu Builder'ı yeniden çalıştırır.
-        final appState =
-            ListenableProvider.of<AppState>(providerContext, listen: true);
+    // ThemeProvider'ı dinle: Tema değiştiğinde MaterialApp yeniden çizilir.
+    // Provider.of, özel ListenableProvider yerine standart paketi kullanır.
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
-        // Tema modunu AppState'ten al
-        ThemeMode mode;
-        switch (appState.currentThemeMode) {
-          case AppThemeMode.light:
-            mode = ThemeMode.light;
-            break;
-          case AppThemeMode.dark:
-            mode = ThemeMode.dark;
-            break;
-          case AppThemeMode.system:
-            mode = ThemeMode.system;
-            break;
-          default:
-            mode = ThemeMode.system; // Varsayılan değer atanmasını garantiler
-        }
+    return MaterialApp(
+      title: 'Kelime Gezgini',
+      debugShowCheckedModeBanner: false,
 
-        return MaterialApp(
-          title: 'Kelime Gezgini',
-          debugShowCheckedModeBanner: false,
-          // Tema Ayarları
-          theme: lightTheme,
-          darkTheme: darkTheme,
-          themeMode: mode, // Dinlenen tema modu
+      // Tema Ayarları
+      theme: lightTheme,
+      darkTheme: darkTheme,
 
-          home: const AppScaffold(),
-        );
-      }),
+      // themeMode, ThemeProvider'dan gelen kaydedilmiş tercihi kullanır.
+      themeMode: themeProvider.flutterThemeMode,
+
+      home: const AppScaffold(),
     );
   }
 }

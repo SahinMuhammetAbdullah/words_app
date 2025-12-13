@@ -5,7 +5,7 @@ import 'package:words_app/app_state.dart';
 import 'package:words_app/core/constants/constants.dart';
 import 'package:words_app/features/repetition/widgets/repetition_dashboard.dart'; // Yeni Dashboard widget'ı
 import 'package:words_app/features/repetition/widgets/repetition_view.dart';     // Yeni Kart Görünümü widget'ı
-
+import 'package:provider/provider.dart';
 class RepetitionPage extends StatefulWidget {
   const RepetitionPage({super.key});
 
@@ -49,7 +49,7 @@ class _RepetitionPageState extends State<RepetitionPage> {
 
   // 3. Cevap işleyici: İlerlemeyi günceller ve sonraki kelimeye geçer.
   void _handleResponse(Word currentWord, bool known) async {
-    final appState = ListenableProvider.of<AppState>(context, listen: false);
+    final appState = Provider.of<AppState>(context, listen: false);
 
     final updatedWord = appState.calculateNextReview(currentWord, known);
     await appState.updateWordProgress(updatedWord);
@@ -72,7 +72,7 @@ class _RepetitionPageState extends State<RepetitionPage> {
   void _onLevelSelected(String level) {
       setState(() {
           _selectedLevel = level;
-          _loadAndShuffleWords(ListenableProvider.of<AppState>(context, listen: false).allWords); 
+          _loadAndShuffleWords(Provider.of<AppState>(context, listen: false).allWords); 
       });
   }
   
@@ -88,7 +88,7 @@ class _RepetitionPageState extends State<RepetitionPage> {
 
   @override
   Widget build(BuildContext context) {
-    final appState = ListenableProvider.of<AppState>(context, listen: true);
+    final appState = Provider.of<AppState>(context, listen: true);
     final allWords = appState.allWords;
 
     // A. Veri Senkronizasyonu Kontrolü

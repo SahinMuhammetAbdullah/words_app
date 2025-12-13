@@ -57,12 +57,17 @@ final ColorScheme lightColorScheme = ColorScheme.fromSeed(
 
 // Karanlık Tema Renk Şeması
 final ColorScheme darkColorScheme = ColorScheme.fromSeed(
-  seedColor: PRIMARY_COLOR_LOGO, // <<< seedColor ZORUNLU PARAMETRESİ EKLENDİ
+  seedColor: PRIMARY_COLOR_LOGO,
   brightness: Brightness.dark,
   primary: PRIMARY_COLOR_LOGO,
   onPrimary: Colors.white,
-  surface: Colors.grey.shade800,
-  onSurface: Colors.white,
+  
+  // DÜZELTME 1: Yüzey rengini biraz daha canlandırıyoruz (Daha az boğuk).
+  surface: Color(0xFF1E1E1E), // Önceki Colors.grey.shade800'den daha koyu ama daha fresh bir siyah
+  
+  // DÜZELTME 2: Metin rengini saf beyaz yerine hafif krem beyazı yapıyoruz (Daha yumuşak).
+  onSurface: Color(0xFFE0E0E0), 
+  
   error: Colors.red.shade400,
   secondary: Colors.purple.shade400,
   onSecondary: Colors.white,
@@ -103,21 +108,23 @@ final ThemeData lightTheme = ThemeData(
 final ThemeData darkTheme = ThemeData(
   colorScheme: darkColorScheme,
   brightness: Brightness.dark,
-  cardColor: darkColorScheme.surface,
-  scaffoldBackgroundColor: Colors.grey.shade900,
-
-  // HATA DÜZELTİLDİ: apply() metodu doğru kullanıldı, metin rengini onSurface'e bağlar.
-  textTheme: Typography.material2018().white.apply(
-        bodyColor: darkColorScheme.onSurface,
-        displayColor: darkColorScheme.onSurface,
-      ),
-
+  
+  // DÜZELTME 3: Kart rengi surface rengini kullanır.
+  cardColor: darkColorScheme.surface, 
+  
+  // DÜZELTME 4: Ana arka planı da biraz daha koyu yapalım.
+  scaffoldBackgroundColor: Colors.black, 
+  
+  // Metin teması (onSurface rengini çeker)
+  textTheme: Typography.material2018().white.apply( 
+    bodyColor: darkColorScheme.onSurface,
+    displayColor: darkColorScheme.onSurface,
+  ),
+  
   appBarTheme: AppBarTheme(
+    // AppBar rengi yüzey rengini kullanır.
     color: darkColorScheme.surface,
-    titleTextStyle: TextStyle(
-        color: darkColorScheme.onSurface,
-        fontSize: 20,
-        fontWeight: FontWeight.w500),
+    titleTextStyle: TextStyle(color: darkColorScheme.onSurface, fontSize: 20, fontWeight: FontWeight.w500),
     iconTheme: IconThemeData(color: darkColorScheme.onSurface),
     elevation: 0,
   ),

@@ -22,6 +22,9 @@ dependencies:
   lucide_icons: ^0.257.0
   flutter_tts: ^4.2.3
   flutter_launcher_icons: ^0.14.4
+  shared_preferences: ^2.2.2
+  provider: ^6.0.2
+
   
 dev_dependencies:
   flutter_test:

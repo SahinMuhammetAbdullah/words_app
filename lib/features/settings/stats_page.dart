@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:words_app/app_state.dart';
 import 'package:words_app/core/models/word.dart';
 import 'package:words_app/core/constants/constants.dart';
-
+import 'package:provider/provider.dart';
 class StatsPage extends StatelessWidget {
   const StatsPage({super.key});
 
@@ -119,7 +119,7 @@ class StatsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = ListenableProvider.of<AppState>(context);
+    final appState = Provider.of<AppState>(context);
 
     final learnedWords = appState.allWords.where((w) => w.isLearned).toList();
     final stats = _calculateStats(appState.allWords, learnedWords);

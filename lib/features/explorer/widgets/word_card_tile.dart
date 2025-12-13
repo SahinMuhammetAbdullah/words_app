@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:words_app/core/models/word.dart';
 import 'package:words_app/app_state.dart';
-
+import 'package:provider/provider.dart'; // Provider'ı içeri aktarın
 class WordCardTile extends StatelessWidget {
   final Word word;
   final VoidCallback onToggleFavorite;
@@ -47,7 +47,7 @@ class WordCardTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState =
-        ListenableProvider.of<AppState>(context, listen: false); // TTS için
+        Provider.of<AppState>(context, listen: false); // TTS için
     final levelColor = _getLevelColor(word.cefr);
     final posName = _getPosName(word.pos);
     final isFavorite = word.isFavorite;

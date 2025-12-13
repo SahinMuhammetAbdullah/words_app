@@ -1,9 +1,9 @@
-// lib/features/settings/settings_page.dart
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart'; // Provider'ı içeri aktarın
 import 'package:words_app/app_state.dart';
 import 'package:words_app/core/constants/constants.dart';
 import 'package:words_app/features/settings/stats_page.dart';
+import 'package:words_app/theme_provider.dart'; // Tema sağlayıcısı
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -25,14 +25,16 @@ class SettingsPage extends StatelessWidget {
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
-          color: Theme.of(context).colorScheme.primary,
+          // onSurface (metin rengi) kullanılıyor
+          color: Theme.of(context).colorScheme.onSurface,
         ),
       ),
     );
   }
 
-  // Genel Ayar Kutucuğu
-  Widget _buildSettingsTile(BuildContext context, {
+  // Genel Ayar Kutucuğu (Aynı kalır)
+  Widget _buildSettingsTile(
+    BuildContext context, {
     required String title,
     required String subtitle,
     required IconData icon,
@@ -53,13 +55,16 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // AppState'ten tema durumunu dinliyoruz
-    final appState = ListenableProvider.of<AppState>(context);
+    // DÜZELTME: Tema durumunu ThemeProvider'dan dinliyoruz.
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
+    // appState'i de kullanıyorsanız (örneğin veri sıfırlama için):
+    // final appState = Provider.of<AppState>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ayarlar'),
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        // AppBar rengi temadan otomatik alınır.
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -69,7 +74,7 @@ class SettingsPage extends StatelessWidget {
             // --- 1. Hesap Ayarları ---
             _buildSectionHeader(context, 'Hesap'),
             _buildSettingsTile(
-              context, 
+              context,
               title: 'Giriş Bilgileri',
               subtitle: 'Kullanıcı adı: Öğrenci (Yer Tutucu)',
               icon: Icons.person,
@@ -79,26 +84,35 @@ class SettingsPage extends StatelessWidget {
 
             // --- 2. Görünüm Ayarları (Tema Seçimi) ---
             _buildSectionHeader(context, 'Görünüm'),
-            
+
             Card(
               elevation: 2,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
               child: Column(
                 children: AppThemeMode.values.map((mode) {
                   String title;
                   switch (mode) {
-                    case AppThemeMode.light: title = 'Aydınlık Tema'; break;
-                    case AppThemeMode.dark: title = 'Karanlık Tema'; break;
-                    case AppThemeMode.system: title = 'Sistem Varsayılanı'; break;
+                    case AppThemeMode.light:
+                      title = 'Aydınlık Tema';
+                      break;
+                    case AppThemeMode.dark:
+                      title = 'Karanlık Tema';
+                      break;
+                    case AppThemeMode.system:
+                      title = 'Sistem Varsayılanı';
+                      break;
                   }
-                  
+
                   return RadioListTile<AppThemeMode>(
                     title: Text(title),
                     value: mode,
-                    groupValue: appState.currentThemeMode,
+                    // DÜZELTME: Seçili değeri ThemeProvider'dan alıyoruz.
+                    groupValue: themeProvider.themeMode,
                     onChanged: (AppThemeMode? newMode) {
                       if (newMode != null) {
-                        appState.setThemeMode(newMode); 
+                        // DÜZELTME: Temayı ayarlamak için ThemeProvider metodunu kullanıyoruz.
+                        themeProvider.setThemeMode(newMode);
                       }
                     },
                   );
@@ -110,24 +124,24 @@ class SettingsPage extends StatelessWidget {
 
             // --- 3. İlerleme ve Veri ---
             _buildSectionHeader(context, 'İlerleme ve Veri'),
-            
+
             // İstatistik Sayfasına Yönlendirme
             _buildSettingsTile(
-              context, 
+              context,
               title: 'Detaylı İstatistikler',
               subtitle: 'Öğrenme seviyenizi ve puan dağılımınızı görün',
               icon: Icons.bar_chart,
               onTap: () => _navigateToStats(context),
             ),
-            
+
             // Veri Sıfırlama
             _buildSettingsTile(
-              context, 
+              context,
               title: 'Verileri Sıfırla (Geliştirici)',
               subtitle: 'Tüm öğrenme ilerlemesini ve istatistikleri sıfırlar.',
               icon: Icons.delete_forever,
               onTap: () {
-                 // **ÖNEMLİ:** Veri sıfırlama diyalogu burada açılmalıdır.
+                // **ÖNEMLİ:** Veri sıfırlama diyalogu burada açılmalıdır.
               },
             ),
           ],

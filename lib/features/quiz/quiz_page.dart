@@ -7,7 +7,7 @@ import 'package:words_app/features/quiz/widgets/quiz_intro.dart'; // YENİ
 import 'package:words_app/features/quiz/widgets/quiz_question_view.dart'; // YENİ
 import 'package:words_app/features/quiz/widgets/quiz_result.dart'; // YENİ
 import 'dart:math';
-
+import 'package:provider/provider.dart';
 // ENUM'LAR VE MODELLER TEKRAR BURADA TANIMLI OLMALIDIR (veya core/models'e taşınmalıdır)
 enum QuizState { intro, question, result }
 enum QuizMode { multiple, fill, random }
@@ -111,7 +111,7 @@ class _QuizPageState extends State<QuizPage> {
 
   void _checkAnswer(String submittedAnswer) async {
     if (_showAnswer) return;
-    final appState = ListenableProvider.of<AppState>(context, listen: false);
+    final appState = Provider.of<AppState>(context, listen: false);
     final currentQuestion = _currentQuiz[_questionIndex];
     final normalizedAnswer = submittedAnswer.trim().toLowerCase();
     final isCorrect = normalizedAnswer == currentQuestion.correctAnswer.toLowerCase();
@@ -153,7 +153,7 @@ class _QuizPageState extends State<QuizPage> {
   // Ana Build Metodu
   @override
   Widget build(BuildContext context) {
-    final appState = ListenableProvider.of<AppState>(context);
+    final appState = Provider.of<AppState>(context);
     
     switch (_quizState) {
       case QuizState.intro:

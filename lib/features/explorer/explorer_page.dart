@@ -10,6 +10,7 @@ import 'package:words_app/features/explorer/widgets/explorer_root_view.dart';
 import 'package:words_app/features/explorer/widgets/explorer_level_selection.dart';
 import 'package:words_app/features/explorer/widgets/explorer_pos_selection.dart';
 import 'package:words_app/features/explorer/widgets/search_overlay.dart';
+import 'package:provider/provider.dart'; // Provider'ı içeri aktarın
 
 // Keşif sayfasındaki farklı görünümleri yönetmek için bir Enum
 enum ExplorerView { root, levelSelection, posSelection, wordList }
@@ -44,9 +45,12 @@ class _ExplorerPageState extends State<ExplorerPage> {
 
   // Metot: Arama butonu tıklandığında tam ekran arama modalını açar.
   Widget _buildSearchBar(BuildContext context, AppState appState) {
+    // Tema renklerini al
+    final colorScheme = Theme.of(context).colorScheme;
+    
     return Padding(
       padding: const EdgeInsets.symmetric(
-          horizontal: 8.0, vertical: 8.0), // <<< DÜZELTİLDİ
+          horizontal: 8.0, vertical: 8.0),
       child: Card(
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -65,18 +69,19 @@ class _ExplorerPageState extends State<ExplorerPage> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               children: [
-                const Icon(Icons.search, color: Colors.grey),
+                // DÜZELTME 1: İkon rengi onSurface (metin rengi) ile uyumlu hale getirildi.
+                Icon(Icons.search, color: colorScheme.onSurface.withOpacity(0.7)), 
                 const SizedBox(width: 10),
+                // DÜZELTME 2: Metin rengi onSurface (metin rengi) ile uyumlu hale getirildi.
                 Text(
                   'Tüm kelimeler ve anlamları arasında ara...',
-                  style: TextStyle(color: Colors.grey.shade600),
+                  style: TextStyle(color: colorScheme.onSurface.withOpacity(0.7)),
                 ),
               ],
             ),
-          ),
         ),
       ),
-    );
+    ));
   }
 
   // Metot: Seçimler yapıldığında WordList görünümüne geçişi sağlar.
@@ -91,6 +96,8 @@ class _ExplorerPageState extends State<ExplorerPage> {
 
   // Kelime Listesi Görünümü
   Widget _buildWordListView(AppState appState) {
+    // Tema renklerini al
+    final colorScheme = Theme.of(context).colorScheme;
     final allWords = appState.allWords;
 
     // Filtreleme mantığı: Sadece Level ve POS filtreleri uygulanır (Arama, SearchOverlay'de yapılır)
@@ -115,8 +122,12 @@ class _ExplorerPageState extends State<ExplorerPage> {
           padding: const EdgeInsets.all(16.0),
           child: Text(
             '$viewTitle (${filteredWords.length} kelime)',
-            style: const TextStyle(
-                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
+            // DÜZELTME 3: Sabit mavi renk kaldırıldı, primary veya secondary renk kullanıldı
+            style: TextStyle(
+                fontSize: 16, 
+                fontWeight: FontWeight.bold, 
+                color: colorScheme.primary // Temanın ana rengini kullan
+            ),
             textAlign: TextAlign.center,
           ),
         ),
@@ -169,7 +180,7 @@ class _ExplorerPageState extends State<ExplorerPage> {
 
   @override
   Widget build(BuildContext context) {
-    final appState = ListenableProvider.of<AppState>(context);
+    final appState = Provider.of<AppState>(context);
     final stats = _calculateStats(appState.allWords);
 
     Widget contentWidget;
