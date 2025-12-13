@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:words_app/app_state.dart';
 import 'package:words_app/core/models/word.dart';
+import 'package:provider/provider.dart';
 
 // Ana kart tekrarı görünümü (Butonlar alta sabitlenmiş)
 class RepetitionView extends StatelessWidget {
@@ -201,13 +202,13 @@ class _RepetitionState extends State<Repetition> {
                   IconButton(
                     icon: const Icon(Icons.volume_up, color: Colors.blue),
                     tooltip: 'Kelimeyi oku',
-                    onPressed: () => ListenableProvider.of<AppState>(context, listen: false).speak(widget.word.headword), 
+                    onPressed: () => Provider.of<AppState>(context, listen: false).speak(widget.word.headword), 
                   ),
                   const SizedBox(width: 10),
                   IconButton(
                     icon: const Icon(Icons.hearing, color: Colors.blue),
                     tooltip: 'Cümleyi oku',
-                    onPressed: () => ListenableProvider.of<AppState>(context, listen: false).speak(widget.word.sentence),
+                    onPressed: () => Provider.of<AppState>(context, listen: false).speak(widget.word.sentence),
                   ),
                 ],
               ),

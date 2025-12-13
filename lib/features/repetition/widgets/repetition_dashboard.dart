@@ -3,7 +3,7 @@ import 'package:words_app/app_state.dart';
 import 'package:words_app/core/constants/constants.dart';
 import 'package:words_app/core/models/word.dart';
 import 'package:intl/intl.dart';
-
+import 'package:provider/provider.dart';
 class RepetitionDashboard extends StatelessWidget {
   final List<Word> allWords;
   final List<String> levels;
@@ -24,7 +24,7 @@ class RepetitionDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = ListenableProvider.of<AppState>(context);
+    final appState = Provider.of<AppState>(context);
     final userProgress = appState.userProgress;
 
     final neededToCompleteGoal = userProgress.dailyGoal - userProgress.studiedToday;
